@@ -4,9 +4,9 @@ class Counter extends React.Component {
         result: this.props.result,
     }
 
-    handleMathClick(type, number = 1) {
+    handleMathClick = (type, number = 1) => {
         debugger
-        if (type === "substraction") {
+        if (type === "subtraction") {
             this.setState(prevState => ({
                     count: prevState.count + 1,
                     result: prevState.result - number,
@@ -28,18 +28,54 @@ class Counter extends React.Component {
     render() {
         return (
             <React.Fragment>
-                <button onClick={this.handleMathClick.bind(this, "substraction", 10)}>-10</button>
-                <button onClick={() => this.handleMathClick("substraction")}>-1</button>
-                <button onClick={() => this.handleMathClick("reset")}>Reset</button>
-                <button onClick={() => this.handleMathClick("addition")}>+1</button>
-                <button onClick={() => this.handleMathClick("addition", 10)}>+10</button>
-                <h1>Liczba kliknięć: {this.state.count}</h1>
-                <h1>Wynik: {this.state.result}</h1>
+                <MathButton name="-10"
+                            number="10"
+                            type="subtraction"
+                            click={this.handleMathClick}/>
+
+                <MathButton name="-1"
+                            number="1"
+                            type="subtraction"
+                            click={this.handleMathClick}/>
+
+                <MathButton name="RESET"
+                            type="reset"
+                            click={this.handleMathClick}/>
+
+                <MathButton name="1"
+                            number="1"
+                            type="addition"
+                            click={this.handleMathClick}/>
+
+                <MathButton name="10"
+                            number="10"
+                            type="addition"
+                            click={this.handleMathClick}/>
+
+                <ResultPanel count={this.state.count}
+                             result={this.state.result}/>
             </React.Fragment>
         )
     }
 }
 
-const startValue = 10;
+const MathButton = (props) => {
+    console.log(props);
+    const number = parseInt(props.number);
+    return (
+        <button onClick={() => props.click(props.type, number)}>{props.name}</button>
+    )
+}
+
+const ResultPanel = (props) => {
+    return (
+        <>
+            <h1>Liczba kliknięć: {props.count} {props.count > 10 ?
+                <span>Mi by się nie chciało tyle klikać</span> : null}</h1>
+            <h1>Wynik: {props.result}</h1>
+        </>
+    )
+}
+const startValue = 0;
 
 ReactDOM.render(<Counter result={startValue}/>, document.getElementById('root'));
